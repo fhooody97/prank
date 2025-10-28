@@ -1,19 +1,54 @@
-﻿<!doctype html>
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <title>Video</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;background:#111;color:#fff;font-family:system-ui,Segoe UI,Roboto;}
-    img{width:320px;height:320px;object-fit:contain}
-    h1{margin:18px 0 0;font-size:22px}
-    p{margin:6px 0 0;color:#ddd}
+    :root{--bg:#0f1720;--muted:#cbd5e1}
+    html,body{height:100%;margin:0}
+    body{display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(180deg,#071022 0,#0f1720 100%);color:#fff;font-family:system-ui,Segoe UI,Roboto}
+    .card{display:flex;flex-direction:column;align-items:center;gap:18px;padding:28px;border-radius:12px;background:rgba(255,255,255,0.03);box-shadow:0 6px 22px rgba(2,6,23,0.6)}
+    img{width:320px;height:320px;object-fit:contain;border-radius:8px}
+    h1{font-size:20px;margin:0}
+    p{margin:0;color:var(--muted)}
+    .count{font-weight:700;font-size:20px;color:#ffd43b;margin-top:6px}
+    a.fallback{display:inline-block;margin-top:12px;color:#7cc0ff;text-decoration:none}
+    a.fallback:hover{text-decoration:underline}
   </style>
+  <!-- Meta refresh fallback (will redirect after 5s) -->
+  <meta http-equiv="refresh" content="5;url=https://www.youtube.com/watch?v=dQw4w9WgXcQ">
 </head>
 <body>
-  <img src="emoji-animated.gif" alt="haha">
-  <h1>😂 Hahaa — you fell for it!</h1>
-  <p>(Harmless demo)</p>
+  <div class="card" role="main" aria-live="polite">
+    <img src="emoji-animated.gif" alt="prank emoji">
+    <h1>😂 Hahaa — you fell for it!</h1>
+    <p>This page will redirect to the video in <span id="count" class="count">5</span> seconds.</p>
+    <a id="skip" class="fallback" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Skip & go to the video now</a>
+  </div>
+
+  <script>
+    (function(){
+      const target = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // change if you want a different video
+      let s = 5;
+      const el = document.getElementById('count');
+      const skip = document.getElementById('skip');
+
+      const t = setInterval(()=> {
+        s -= 1;
+        if (s <= 0) {
+          clearInterval(t);
+          // final redirect
+          window.location.replace(target);
+        } else {
+          el.textContent = s;
+        }
+      }, 1000);
+
+      // optional: allow skip via clicking anywhere on the image
+      document.querySelector('img').addEventListener('click', ()=> window.location.replace(target));
+      // also clicking skip link uses default href
+    })();
+  </script>
 </body>
 </html>
